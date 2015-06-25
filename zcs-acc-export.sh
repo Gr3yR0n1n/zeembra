@@ -3,13 +3,13 @@
 #Hapus Layar
 clear
 
-echo -e "###################################################################################"
-echo -e "# Zimbra export-acc-zcs.sh ver 0.0.2                                              #"
-echo -e "# Skrip untuk export account Zimbra berikut profile dan password                  #"
-echo -e "# Masim 'Vavai' Sugianto - vavai@vavai.com - http://www.vavai.com                 #"
-echo -e "# Untuk saran dan pertanyaan silakan menggunakan Milis Komunitas Zimbra Indonesia #"
-echo -e "# Link Komunitas : http://www.zimbra.web.id - http://www.opensuse.or.id           #"
-echo -e "###################################################################################"
+echo "###################################################################################"
+echo "# Zimbra export-acc-zcs.sh ver 0.0.2                                              #"
+echo "# Skrip untuk export account Zimbra berikut profile dan password                  #"
+echo "# Masim 'Vavai' Sugianto - vavai@vavai.com - http://www.vavai.com                 #"
+echo "# Untuk saran dan pertanyaan silakan menggunakan Milis Komunitas Zimbra Indonesia #"
+echo "# Link Komunitas : http://www.zimbra.web.id - http://www.opensuse.or.id           #"
+echo "###################################################################################"
 
 # /* Variable untuk bold */
 ibold="\033[1m""\n===> "
@@ -43,21 +43,23 @@ ZIMBRA_LDAP_PASSWORD=`su - zimbra -c "zmlocalconfig -s zimbra_ldap_password | cu
 touch $ZCS_VER
 echo $VERSION > $ZCS_VER
 
-echo -e $ibold"Retrieve Zimbra User.............................."$ebold
+echo $ibold"Retrieve Zimbra User.............................."$ebold
 
-grep "Release 5." $ZCS_VER
-if [ $? = 0 ]; then
-USERS=`su - zimbra -c 'zmprov gaa'`;
-LDAP_MASTER_URL=`su - zimbra -c "zmlocalconfig -s ldap_master_url | cut -d ' ' -f3"`
-fi
+#grep "Release 8." $ZCS_VER
+#if [ $? = 0 ]; then
+#USERS=`su - zimbra -c 'zmprov gaa'`;
+#LDAP_MASTER_URL=`su - zimbra -c "zmlocalconfig -s ldap_master_url | cut -d ' ' -f3"`
+#echo $LDAP_MASTER_URL
+#fi
 
-grep "Release 6." $ZCS_VER
+grep "Release 8." $ZCS_VER
 if [ $? = 0 ]; then
 USERS=`su - zimbra -c 'zmprov -l gaa'`;
 LDAP_MASTER_URL="ldapi:///"
+echo $LDAP_MASTER_URL
 fi
 
-echo -e $ibold"Processing account, please wait.............................."$ebold
+echo $ibold"Processing account, please wait.............................."$ebold
 # /* Proses insert account kedalam file hasil export */
 for ACCOUNT in $USERS; do
 NAME=`echo $ACCOUNT`;
@@ -65,7 +67,8 @@ DOMAIN=`echo $ACCOUNT | awk -F@ '{print $2}'`;
 ACCOUNT=`echo $ACCOUNT | awk -F@ '{print $1}'`;
 ACC=`echo $ACCOUNT | cut -d '.' -f1`
 
-if [ $NAMA_DOMAIN == $DOMAIN ] ;
+#if [ $NAMA_DOMAIN == $DOMAIN ] ;
+if [ X"$NAMA_DOMAIN" = X"$DOMAIN" ] ;
 then
 OBJECT="(&(objectClass=zimbraAccount)(mail=$NAME))"
 dn=`/opt/zimbra/bin/ldapsearch -H $LDAP_MASTER_URL -w $ZIMBRA_LDAP_PASSWORD -D uid=zimbra,cn=admins,cn=zimbra -x $OBJECT | grep dn:`
@@ -84,7 +87,7 @@ initials=`/opt/zimbra/bin/ldapsearch -H $LDAP_MASTER_URL -w $ZIMBRA_LDAP_PASSWOR
 
 sn=`/opt/zimbra/bin/ldapsearch -H $LDAP_MASTER_URL -w $ZIMBRA_LDAP_PASSWORD -D uid=zimbra,cn=admins,cn=zimbra -x $OBJECT | grep sn: | cut -d ':' -f2 | sed 's/^ *//g' | sed 's/ *$//g'`
 
-	if [ $ACC == "admin" ] || [ $ACC == "wiki" ] || [ $ACC == "galsync" ] || [ $ACC == "ham" ] || [ $ACC == "spam" ]; then
+	if [ $ACC = "admin" ] || [ $ACC = "wiki" ] || [ $ACC = "galsync" ] || [ $ACC = "ham" ] || [ $ACC = "spam" ]; then
     		echo "Skipping system account, $NAME..."
 	else
 		echo "createAccount $NAME passwordtemp displayName '$displayName' givenName '$givenName' sn '$sn' initials '$initials' zimbraPasswordMustChange FALSE" >> $NAMA_FILE
@@ -101,6 +104,6 @@ else
 fi
 
 done
-echo -e $ibold"All account has been exported sucessfully into $NAMA_FILE and $LDIF_FILE..."$ebold
+echo $ibold"All account has been exported sucessfully into $NAMA_FILE and $LDIF_FILE..."$ebold
 
 
