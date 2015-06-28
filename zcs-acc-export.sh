@@ -87,12 +87,12 @@ initials=`/opt/zimbra/bin/ldapsearch -H $LDAP_MASTER_URL -w $ZIMBRA_LDAP_PASSWOR
 
 sn=`/opt/zimbra/bin/ldapsearch -H $LDAP_MASTER_URL -w $ZIMBRA_LDAP_PASSWORD -D uid=zimbra,cn=admins,cn=zimbra -x $OBJECT | grep sn: | cut -d ':' -f2 | sed 's/^ *//g' | sed 's/ *$//g'`
 
-isExternalVirtualAccount=`/opt/zimbra/bin/ldapsearch -H $LDAP_MASTER_URL -w $ZIMBRA_LDAP_PASSWORD -D uid=zimbra,cn=admins,cn=zimbra -x $OBJECT | grep zimbraIsExternalVirtualAccount: | cut -d ':' -f2 | sed 's/^ *//g' | sed 's/ *$//g'`
+zimbraIsExternalVirtualAccount=`/opt/zimbra/bin/ldapsearch -H $LDAP_MASTER_URL -w $ZIMBRA_LDAP_PASSWORD -D uid=zimbra,cn=admins,cn=zimbra -x $OBJECT | grep zimbraIsExternalVirtualAccount: | cut -d ':' -f2 | sed 's/^ *//g' | sed 's/ *$//g'`
 
 	if [ $ACC = "admin" ] || [ $ACC = "wiki" ] || [ $ACC = "galsync" ] || [ $ACC = "ham" ] || [ $ACC = "spam" ] || [ $ACC = "virus-quarantine" ]; then
     		echo "Skipping system account, $NAME..."
 	else
-		echo "createAccount $NAME passwordtemp displayName '$displayName' givenName '$givenName' sn '$sn' initials '$initials' zimbraIsExternalVirtualAccount '$isExternalVirtualAccount' zimbraPasswordMustChange FALSE" >> $NAMA_FILE
+		echo "createAccount $NAME passwordtemp displayName '$displayName' givenName '$givenName' sn '$sn' initials '$initials' zimbraIsExternalVirtualAccount '$zimbraIsExternalVirtualAccount' zimbraPasswordMustChange FALSE" >> $NAMA_FILE
 
     		echo "$dn
 changetype: modify
