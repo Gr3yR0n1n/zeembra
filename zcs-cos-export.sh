@@ -1,5 +1,10 @@
 #!/bin/bash
 
+clear¬
+
+echo '###################################################################################'¬
+echo '# Zimbra zcs-cos-export.sh ver 0.0.1                                              #'¬
+echo '###################################################################################'¬
 
 echo -n "Enter working output folder for COS (eg: /tmp/zimbra/) : "
 read outputFolder

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+clear¬
+ ¬
+echo '###################################################################################'¬
+echo '# Zimbra zcs-cos-import.sh ver 0.0.1                                              #'¬
+echo '###################################################################################'¬
+
 echo -n "Enter working input folder for COS (eg: /tmp/zimbra/) : "
 read inputFolder
 
