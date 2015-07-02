@@ -1,7 +1,11 @@
 #!/bin/bash
 
+echo -n "Enter working input folder for COS (eg: /tmp/zimbra/) : "
+read inputFolder
+
 # Create COS
-cosList=`cat $PWD/cos/cos.lst`
+cosFolder=$inputFolder'/cos'
+cosList=`cat $cosFolder/cos.lst`
 
 arr=$(echo $cosList | tr " " "\n");
 for cosName in $arr
@@ -11,7 +15,7 @@ do
 done
 
 # Modify Attributes
-cosFileList=`ls $PWD/cos/*.cos`
+cosFileList=`ls $cosFolder/*.cos`
 arr=$(echo $cosFileList | tr " " "\n");
 for cosFile in $arr
 do

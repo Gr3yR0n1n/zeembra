@@ -97,7 +97,7 @@ zimbraIsExternalVirtualAccount=`/opt/zimbra/bin/ldapsearch -H $LDAP_MASTER_URL -
     		echo "$dn
 changetype: modify
 replace: userPassword
-userPassword:: $userPassword
+userPassword: $userPassword
 " >> $LDIF_FILE
     		echo "Adding account $NAME"
 	fi
